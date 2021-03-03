@@ -25,6 +25,9 @@
 <body>
     <div id="map"></div>
     <script>
+
+        const tilesetId = 'mxsun.cueu4svh';
+
         mapboxgl.accessToken = 'pk.eyJ1IjoibXhzdW4iLCJhIjoiY2ppb3FiYmQ0MG55ZjNrbWYwZGNlOHRzNCJ9.Vw8Dy9FI51LJkhl6MUsqNQ';
         var map = new mapboxgl.Map({
             container: 'map',
@@ -35,7 +38,8 @@
             center: [-178.888807, 41.560948]
         });
 
-        const tilesetId = 'mxsun.cueu4svh';
+        map.addControl(new mapboxgl.ScaleControl({maxWidth: 200}), 'bottom-right');
+
 
         map.on('load', function () {
             map.addSource('terrain', {
