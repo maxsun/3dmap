@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>3d Demo</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoibXhzdW4iLCJhIjoiY2ppb3FiYmQ0MG55ZjNrbWYwZGNlOHRzNCJ9.Vw8Dy9FI51LJkhl6MUsqNQ';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/light-v10',
+            zoom: 18,
+            bearing: -91.24,
+            pitch: 36.02,
+            center: [-178.888807, 41.560948]
+        });
+
+        const tilesetId = 'mxsun.cueu4svh';
+
+        map.on('load', function () {
+            map.addSource('terrain', {
+                type: 'vector',
+                url: `mapbox://${tilesetId}`
+            });
+            map.addLayer({
+                'id': 'terrain',
+                'type': 'vector',
+                'source-layer': 'out',
+                'source': 'terrain',
+                'type': 'fill-extrusion',
+                'paint': {
+                    // See the Mapbox Style Specification for details on data expressions.
+                    // https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions
+
+                    // Get the fill-extrusion-color from the source 'color' property.
+                    'fill-extrusion-color': ["interpolate",
+                        ["exponential", 1.2], //interpolation
+                        ['get', 'DN'], //input
+                        -17, '#0D0630',
+                        -1, '#41EAD4'
+                    ],
+
+                    // Get fill-extrusion-height from the source 'height' property.
+                    'fill-extrusion-height': ["+", 18, ['get', 'DN']],
+
+                    // Get fill-extrusion-base from the source 'base_height' property.
+                    'fill-extrusion-base': 0,
+
+                    // Make extrusions slightly opaque for see through indoor walls.
+                    'fill-extrusion-opacity': 1
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
